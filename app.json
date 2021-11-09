@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "camera-ocr-bare",
+    "slug": "camera-ocr-bare",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "camera-ocr-bare"
+}
