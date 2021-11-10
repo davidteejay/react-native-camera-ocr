@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, SafeAreaView, ScrollView } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, SafeAreaView, ScrollView, ActivityIndicator } from 'react-native';
 import * as ImagePicker from 'expo-image-picker'
 import vision from '@react-native-firebase/ml-vision'
 import * as DocumentPicker from 'expo-document-picker';
@@ -9,6 +9,7 @@ export default function App() {
   const [text, setText] = useState(null)
   const [result, setResult] = useState("")
   const [media, setMedia] = useState(null)
+  const [loading, setLoading] = useState(false)
 
   const takeImage = async () => {
     const { status } = await ImagePicker.requestCameraPermissionsAsync()
@@ -19,7 +20,7 @@ export default function App() {
         allowsEditing: false,
         quality: 1,
       })
-
+      
       if (!media.cancelled) {
         setMedia(media)
         ocrApiExtractText(media)
@@ -45,7 +46,6 @@ export default function App() {
   }
 
   const pickFile = async () => {
-    console.log('pick file')
     const res = await DocumentPicker.getDocumentAsync({
       multiple: false,
     });
@@ -62,6 +62,8 @@ export default function App() {
     console.log({ processingResult })
   }
 
+  const mergeResult = (previousValue, currentValue) => `${previousValue} \n\n ${currentValue}`;
+
   const ocrApiExtractText = (media) => {
     const formData = new FormData()
     formData.append('doc', {
@@ -69,7 +71,10 @@ export default function App() {
       uri: media.uri,
       type: '*/*',
     })
-  
+
+    console.log("sending image for recognition")
+    setLoading(true)
+
     fetch('https://api.ocr.prunedge.org/extract-text/', {
       method: 'POST',
       headers: {
@@ -79,12 +84,16 @@ export default function App() {
       body: formData
     })
     .then(response => response.json())
-    .then(data => {
-      console.log(data)
-      setResult(data?.text ?? "No result")
+    .then(jsonRes => {
+      console.log(jsonRes)
+      let translation = jsonRes.data.reduce(mergeResult)
+      setResult(translation ?? "No result")
     })
     .catch(error => {
       console.error(error)
+    })
+    .finally(() => {
+      setLoading(false)
     })
   }
 
@@ -104,9 +113,17 @@ export default function App() {
           <Text>Pick Image</Text>
         </TouchableOpacity>
         <Text>Result</Text>
-        <ScrollView>
-        <Text>{result}</Text>
-        </ScrollView>
+        {
+          loading?
+          <ActivityIndicator size="small" color="#0000ff" />
+          :
+          (
+            <ScrollView>
+              <Text>{result}</Text>
+            </ScrollView>
+          )
+        }
+        
         
       </View>
     </SafeAreaView>
