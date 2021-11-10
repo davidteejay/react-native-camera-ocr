@@ -1423,9 +1423,9 @@
   integrity sha512-d2MbgXFDEMOJZGxkdICyL951le6NJirIjviYvVYAU6KqGRN46PmH2BqTA8MH9iUCDkrD/zMIRmbPJPpDVkDCeg==
 
 "@react-native-firebase/ml@^8.4.7":
-  version "10.0.0"
-  resolved "https://registry.yarnpkg.com/@react-native-firebase/ml/-/ml-10.0.0.tgz#ecd802d143530aafddf7e6dc5bc16f33ee4b2987"
-  integrity sha512-+b0IO8zXRtF/SrsMrRVFk9VHOimuZai+cSLfhBVMjvudIxhB2JHoKeAvq0Q77WjrThElyHGVq7grRck78RhHEg==
+  version "13.0.1"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/ml/-/ml-13.0.1.tgz#0303b377c2082b5b9c0705e6b37332e78d95ce1b"
+  integrity sha512-BCh6ZMmeKdms4FZgBrMb9gTFm2vGAYVZqw/N5PKn+Ik9OdlFF5IdUECuwYrgqUm0DPhWrhDm206UHldUAJYJig==
 
 "@react-native/assets@1.0.0":
   version "1.0.0"
@@ -4668,6 +4668,13 @@ react-native-codegen@^0.0.6:
     flow-parser "^0.121.0"
     jscodeshift "^0.11.0"
     nullthrows "^1.1.1"
+
+react-native-document-picker@^7.1.1:
+  version "7.1.1"
+  resolved "https://registry.yarnpkg.com/react-native-document-picker/-/react-native-document-picker-7.1.1.tgz#87f573918eb46681d1a0be4292f3325c7feda5c2"
+  integrity sha512-lEgyfl+JbU/UCDu8UdagBrC5CC71WTfqCzWyGeALLZiXGHrCJo/5BMqWbAc9PSCeiqNMnFkjcybO/kws5gMkxA==
+  dependencies:
+    invariant "^2.2.4"
 
 react-native-gesture-handler@~1.10.2:
   version "1.10.3"
