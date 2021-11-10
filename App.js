@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, SafeAreaView, ScrollView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker'
 import vision from '@react-native-firebase/ml-vision'
-import DocumentPicker from 'react-native-document-picker';
+import * as DocumentPicker from 'expo-document-picker';
 
 export default function App() {
   const camera = useRef()
@@ -46,24 +46,12 @@ export default function App() {
 
   const pickFile = async () => {
     console.log('pick file')
-    try {
-      const res = await DocumentPicker.pickSingle({
-        type: [DocumentPicker.types.pdf],
-      });
-      console.log('res : ' + JSON.stringify(res));
-      // Setting the state to show single file attributes
-      setMedia(res);
-    } catch (err) {
-      setSingleFile(null);
-      // Handling any exception (If any)
-      if (DocumentPicker.isCancel(err)) {
-        // If user canceled the document selection
-        alert('Canceled');
-      } else {
-        // For Unknown Error
-        alert('Unknown Error: ' + JSON.stringify(err));
-        throw err;
-      }
+    const res = await DocumentPicker.getDocumentAsync({
+      multiple: false,
+    });
+    if(res.type==='success'){
+      setMedia(res)
+      ocrApiExtractText(res)
     }
   }
 
@@ -79,7 +67,7 @@ export default function App() {
     formData.append('doc', {
       name: media.uri.split('/').pop(),
       uri: media.uri,
-      type: 'image/*',
+      type: '*/*',
     })
   
     fetch('https://api.ocr.prunedge.org/extract-text/', {
@@ -116,7 +104,10 @@ export default function App() {
           <Text>Pick Image</Text>
         </TouchableOpacity>
         <Text>Result</Text>
+        <ScrollView>
         <Text>{result}</Text>
+        </ScrollView>
+        
       </View>
     </SafeAreaView>
   );
